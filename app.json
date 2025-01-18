@@ -18,6 +18,8 @@
       "supportsTablet": false
     },
     "android": {
+      "package": "mutsumix.tell5nikki",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
