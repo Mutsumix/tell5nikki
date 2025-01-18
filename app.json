@@ -13,7 +13,9 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "mutsumix.tell5nikki",
+      "buildNumber": "1.0.0",
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
@@ -23,6 +25,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fecc8a9f-8227-4a3f-83a6-54a2b454f036"
+      }
     }
   }
 }
