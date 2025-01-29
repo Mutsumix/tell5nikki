@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Animated, Easing } from 'react-native';
+import * as Updates from 'expo-updates';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { QuestionsScreen } from './src/screens/QuestionsScreen';
 import { DiaryPreviewScreen } from './src/screens/DiaryPreviewScreen';
@@ -21,6 +22,23 @@ const forFade = ({ current, closing }) => ({
 });
 
 const App = () => {
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        // Handle or log error appropriately
+        console.log('Error checking for updates:', error);
+      }
+    };
+
+    checkForUpdates();
+  }, []);
+
   return (
     <AnimatedBackground>
       <NavigationContainer>
