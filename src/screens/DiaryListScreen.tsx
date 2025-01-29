@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { theme } from '../styles/theme';
 import { storageUtils } from '../utils/storage';
 import { DiaryEntry } from '../types/diary';
@@ -55,7 +55,7 @@ export const DiaryListScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.content}>
       <TextInput
         style={styles.searchInput}
         value={searchText}
@@ -74,25 +74,58 @@ export const DiaryListScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    width: '100%',
+    paddingTop: Platform.OS === 'ios' ? 60 : 40,
   },
   searchInput: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     color: theme.colors.text,
     padding: theme.spacing.md,
-    margin: theme.spacing.md,
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
     borderRadius: 10,
+    width: '90%',
+    alignSelf: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   listContainer: {
-    padding: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.xl,
   },
   entryContainer: {
-    backgroundColor: theme.colors.primary,
-    padding: theme.spacing.md,
-    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    padding: theme.spacing.lg,
+    borderRadius: 15,
     marginBottom: theme.spacing.md,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   dateText: {
     color: theme.colors.secondary,

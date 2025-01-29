@@ -2,48 +2,60 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Animated, Easing } from 'react-native';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { QuestionsScreen } from './src/screens/QuestionsScreen';
 import { DiaryPreviewScreen } from './src/screens/DiaryPreviewScreen';
 import { DiaryListScreen } from './src/screens/DiaryListScreen';
-import { theme } from './src/styles/theme';
+import { AnimatedBackground } from './src/components/AnimatedBackground';
 
 const Stack = createStackNavigator();
 
+const forFade = ({ current, closing }) => ({
+  cardStyle: {
+    opacity: current.progress.interpolate({
+      inputRange: [0, 0.5, 0.9, 1],
+      outputRange: [0, 0.25, 0.7, 1],
+    })
+  }
+});
+
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.background,
-          },
-          headerTintColor: theme.colors.text,
-          cardStyle: { backgroundColor: theme.colors.background }
-        }}
-      >
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: '今日の日記' }}
-        />
-        <Stack.Screen
-          name="Questions"
-          component={QuestionsScreen}
-          options={{ title: '5つの質問' }}
-        />
-        <Stack.Screen
-          name="DiaryPreview"
-          component={DiaryPreviewScreen}
-          options={{ title: '日記プレビュー' }}
-        />
-        <Stack.Screen
-          name="DiaryList"
-          component={DiaryListScreen}
-          options={{ title: '日記一覧' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AnimatedBackground>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            cardStyle: { backgroundColor: 'transparent' },
+            cardStyleInterpolator: forFade,
+            transitionSpec: {
+              open: {
+                animation: 'timing',
+                config: {
+                  duration: 400,
+                  easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+                  useNativeDriver: true,
+                },
+              },
+              close: {
+                animation: 'timing',
+                config: {
+                  duration: 400,
+                  easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+                  useNativeDriver: true,
+                },
+              },
+            },
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Questions" component={QuestionsScreen} />
+          <Stack.Screen name="DiaryPreview" component={DiaryPreviewScreen} />
+          <Stack.Screen name="DiaryList" component={DiaryListScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AnimatedBackground>
   );
 };
 

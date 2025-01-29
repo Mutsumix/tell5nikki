@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../styles/theme';
 import { QUESTIONS } from '../types/diary';
@@ -26,72 +26,113 @@ export const QuestionsScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.progressBar}>
-        <Text style={styles.progressText}>
-          {currentIndex + 1} / {QUESTIONS.length}
-        </Text>
-      </View>
+    <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.progressBar}>
+          <Text style={styles.progressText}>
+            {currentIndex + 1} / {QUESTIONS.length}
+          </Text>
+        </View>
 
-      <Text style={styles.question}>{currentQuestion.text}</Text>
+        <Text style={styles.question}>{currentQuestion.text}</Text>
 
-      <TextInput
-        style={styles.input}
-        value={answers[currentQuestion.id] || ''}
-        onChangeText={(text) =>
-          setAnswers(prev => ({ ...prev, [currentQuestion.id]: text }))
-        }
-        multiline
-        placeholder="ここに入力してください..."
-        placeholderTextColor={theme.colors.secondary}
-      />
+        <TextInput
+          style={styles.input}
+          value={answers[currentQuestion.id] || ''}
+          onChangeText={(text) =>
+            setAnswers(prev => ({ ...prev, [currentQuestion.id]: text }))
+          }
+          multiline
+          placeholder="ここに入力してください..."
+          placeholderTextColor={theme.colors.secondary}
+        />
 
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={handleNext}
-      >
-        <Text style={styles.buttonText}>
-          {currentIndex === QUESTIONS.length - 1 ? '完了' : '次へ'}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={handleNext}
+        >
+          <Text style={styles.buttonText}>
+            {currentIndex === QUESTIONS.length - 1 ? '完了' : '次へ'}
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
+    width: '100%',
+  },
+  container: {
+    flexGrow: 1,
     padding: theme.spacing.lg,
-    backgroundColor: theme.colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   progressBar: {
+    width: '100%',
     marginBottom: theme.spacing.lg,
   },
   progressText: {
     color: theme.colors.text,
     fontSize: 16,
+    textAlign: 'center',
   },
   question: {
     fontSize: 22,
     color: theme.colors.text,
     marginBottom: theme.spacing.lg,
+    textAlign: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   input: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 10,
     padding: theme.spacing.md,
     color: theme.colors.text,
     minHeight: 100,
     marginBottom: theme.spacing.xl,
+    width: '100%',
   },
   nextButton: {
     backgroundColor: theme.colors.accent,
     padding: theme.spacing.md,
     borderRadius: 10,
     alignItems: 'center',
+    width: '80%',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
   },
   buttonText: {
     color: theme.colors.white,
     fontSize: 18,
+    fontWeight: '500',
   },
 });
